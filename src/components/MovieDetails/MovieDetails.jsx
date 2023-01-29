@@ -9,11 +9,11 @@ function MovieDetails() {
   const genres = useSelector((store) => store.genres);
   const movieData = useSelector((store) => store.movieData);
   useEffect(() => {
-    dispatch({
+    dispatch({// this dispatch fetches the details(image, poster, and description) for the movie
       type: 'SAGA/FETCH_SPECIFICMOVIE',
       payload: id,
     });
-    dispatch({
+    dispatch({//this dispatch fetches the genres for the movie
       type: 'SAGA/FETCH_SPECIFICGENRE',
       payload: id,
     });
@@ -25,7 +25,7 @@ function MovieDetails() {
   console.log(genres);
 
   const resetIdStore = () => {
-    dispatch({
+    dispatch({//this dispatch resets the id store so it's ready for the next image id
       type: 'RESET',
     });
     history.push('/');

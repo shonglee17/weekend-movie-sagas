@@ -18,7 +18,8 @@ function MovieList() {
        console.log(id);
        let idToSave = id
         history.push(`/${id}`)
-        dispatch({ 
+        dispatch({ //this dispatch sends the unique id to the id store to use
+                // for reference when fetching the specific movie/genre data
             type: 'REDUX/SAVE_ID',
             payload: idToSave
         });

@@ -14,7 +14,7 @@ import axios from 'axios';
 // Create sagaMiddleware
 const sagaMiddleware = createSagaMiddleware();
 
-//                                                       STORES BEGIN HERE
+//                                                   REDUX STORES BEGIN HERE
 // Used to store movies returned from the server
 const movies = (state = [], action) => {
   switch (action.type) {
@@ -76,17 +76,17 @@ function* fetchAllMovies() {
 function* fetchSpecificMovie(action) {
   try {
     let id = action.payload;
-    // GET THE FRUIT FROM THE SERVER!
+    // GET THE title, description, and poster from the server
     const response = yield axios({
       method: 'GET',
       url: `/api/movie/${id}`,
     });
 
-    // WOOT. HERE'S THE FRUIT:
+    // WOOT. HERE'S THE DATA :
     const movieInfo = response.data;
     console.log(movieInfo);
-    // WOO! NOW, PUT THAT FRUIT IN THE
-    // basketReducer:
+    // WOO! NOW, PUT THAT DATA IN THE
+    // movieData basket:
     yield put({
       type: 'REDUX/SET_MOVIEDATA',
       payload: movieInfo,
@@ -99,17 +99,17 @@ function* fetchSpecificMovie(action) {
 function* fetchSpecificGenre(action) {
   try {
     let id = action.payload;
-    // GET THE FRUIT FROM THE SERVER!
+    // GET THE GENRE FROM THE SERVER!
     const response = yield axios({
       method: 'GET',
       url: `/api/genre/${id}`,
     });
 
-    // WOOT. HERE'S THE FRUIT:
+    // WOOT. HERE'S THE GENRES:
     const movieInfo = response.data;
     console.log(movieInfo);
-    // WOO! NOW, PUT THAT FRUIT IN THE
-    // basketReducer:
+    // WOO! NOW, PUT THAT DATA IN THE
+    // genres basket:
     yield put({
       type: 'REDUX/SET_GENRES',
       payload: movieInfo,
@@ -118,7 +118,7 @@ function* fetchSpecificGenre(action) {
     console.log('fetchSpecificMovie error:', error);
   }
 }
-//                                                            GLOBAL STORES ARE HERE
+//                                                            GLOBAL REDUCERS ARE HERE
 const storeInstance = createStore(
   combineReducers({
     movies,
