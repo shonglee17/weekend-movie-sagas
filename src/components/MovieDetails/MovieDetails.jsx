@@ -8,7 +8,8 @@ function MovieDetails(){
     const id = useSelector(store => store.id);
     console.log(id);
     
-    const resetStore = () => {
+    
+    const resetIdStore = () => {
         dispatch({ 
             type: 'RESET',
         });
@@ -17,7 +18,7 @@ function MovieDetails(){
     return (
         <>
            <div>Title: {id}</div>
-           <button onClick={resetStore}>Back</button> 
+           <button onClick={resetIdStore}>Back</button> 
         </>
     )
 }
