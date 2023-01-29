@@ -99,7 +99,29 @@ function* fetchSpecificMovie(action) {
   }
 }
 
-
+function* fetchSpecificGenre(action) {
+    try {
+      let id = action.payload
+        // GET THE FRUIT FROM THE SERVER!
+        const response = yield axios({
+            method: 'GET',
+            url: `/api/genre/${id}`
+        })
+  
+        // WOOT. HERE'S THE FRUIT:
+        const movieInfo = response.data
+        console.log(movieInfo);
+        // WOO! NOW, PUT THAT FRUIT IN THE
+        // basketReducer:
+        yield put({
+            type: 'REDUX/SET_GENRES',
+            payload: movieInfo
+        })
+    } catch (error) {
+        console.log('fetchSpecificMovie error:', error)
+    }
+  }
+//                                                            GLOBAL STORES ARE HERE
 const storeInstance = createStore(
     combineReducers({
         movies,
@@ -114,7 +136,8 @@ const storeInstance = createStore(
 // Create the rootSaga generator function
 function* rootSaga() {
     yield takeEvery('SAGA/FETCH_MOVIES', fetchAllMovies);
-    yield takeEvery('SAGA/FETCH_SPECIFIC', fetchSpecificMovie);
+    yield takeEvery('SAGA/FETCH_SPECIFICMOVIE', fetchSpecificMovie);
+    yield takeEvery('SAGA/FETCH_SPECIFICGENRE', fetchSpecificGenre);
 }
 
 // Pass rootSaga into our sagaMiddleware
