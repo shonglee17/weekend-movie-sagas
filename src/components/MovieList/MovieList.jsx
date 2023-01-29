@@ -9,7 +9,7 @@ function MovieList() {
     const movies = useSelector(store => store.movies);
     let history = useHistory()
     useEffect(() => {
-        dispatch({ type: 'FETCH_MOVIES' });
+        dispatch({ type: 'SAGA/FETCH_MOVIES' });
     }, []);
 
     //create a click handler for when the image of a specific movie is clicked and identify the unique id of that image.
@@ -19,7 +19,7 @@ function MovieList() {
        let idToSave = id
         history.push(`/${id}`)
         dispatch({ 
-            type: 'SAVE_ID',
+            type: 'REDUX/SAVE_ID',
             payload: idToSave
         });
     }

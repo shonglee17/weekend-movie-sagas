@@ -19,7 +19,7 @@ const sagaMiddleware = createSagaMiddleware();
 // Used to store movies returned from the server
 const movies = (state = [], action) => {
     switch (action.type) {
-        case 'SET_MOVIES':
+        case 'REDUX/SET_MOVIES':
             return action.payload;
         default:
             return state;
@@ -29,7 +29,7 @@ const movies = (state = [], action) => {
 // Used to store the movie genres
 const genres = (state = [], action) => {
     switch (action.type) {
-        case 'SET_GENRES':
+        case 'REDUX/SET_GENRES':
             return action.payload;
         default:
             return state;
@@ -39,7 +39,20 @@ const genres = (state = [], action) => {
 //Used to store the ID's when image is clicked
 const id = (state = [], action) => {
     switch (action.type) {
-        case 'SAVE_ID':
+        case 'REDUX/SAVE_ID':
+            return action.payload;
+
+        case 'RESET':
+            return state
+
+        default:
+            return state;
+    }
+}
+//Used to store data from a specific movie
+const movieData = (state = [], action) => {
+    switch (action.type) {
+        case 'REDUX/SET_MOVIEDATA':
             return action.payload;
 
         case 'RESET':
@@ -55,7 +68,7 @@ function* fetchAllMovies() {
     try {
         const movies = yield axios.get('/api/movie');
         console.log('get all:', movies.data);
-        yield put({ type: 'SET_MOVIES', payload: movies.data });
+        yield put({ type: 'REDUX/SET_MOVIES', payload: movies.data });
 
     } catch {
         console.log('get all error');
@@ -63,12 +76,36 @@ function* fetchAllMovies() {
         
 }
 
+function* fetchSpecificMovie(action) {
+  try {
+    let id = action.payload
+      // GET THE FRUIT FROM THE SERVER!
+      const response = yield axios({
+          method: 'GET',
+          url: `/api/movie/${id}`
+      })
+
+      // WOOT. HERE'S THE FRUIT:
+      const movieInfo = response.data
+      console.log(movieInfo);
+      // WOO! NOW, PUT THAT FRUIT IN THE
+      // basketReducer:
+      yield put({
+          type: 'REDUX/SET_MOVIEDATA',
+          payload: movieInfo
+      })
+  } catch (error) {
+      console.log('fetchSpecificMovie error:', error)
+  }
+}
+
 
 const storeInstance = createStore(
     combineReducers({
         movies,
         genres,
-        id
+        id,
+        movieData
     }),
     // Add sagaMiddleware to our store
     applyMiddleware(sagaMiddleware, logger),
@@ -76,8 +113,8 @@ const storeInstance = createStore(
 
 // Create the rootSaga generator function
 function* rootSaga() {
-    yield takeEvery('FETCH_MOVIES', fetchAllMovies);
-    yield takeEvery('SAGA/SAVE_ID', id)
+    yield takeEvery('SAGA/FETCH_MOVIES', fetchAllMovies);
+    yield takeEvery('SAGA/FETCH_SPECIFIC', fetchSpecificMovie);
 }
 
 // Pass rootSaga into our sagaMiddleware

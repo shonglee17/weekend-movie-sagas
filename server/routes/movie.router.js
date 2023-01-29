@@ -15,6 +15,20 @@ router.get('/', (req, res) => {
     })
 
 });
+//this route gets a specific movie with an id
+router.get('/:id', (req, res) => {
+  let id = req.params.id
+  const query = `SELECT * FROM movies WHERE "id" = ${id}`;
+  pool.query(query)
+    .then( result => {
+      res.send(result.rows);
+    })
+    .catch(err => {
+      console.log('ERROR: Get all movies', err);
+      res.sendStatus(500)
+    })
+
+});
 
 router.post('/', (req, res) => {
   console.log(req.body);
