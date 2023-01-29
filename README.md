@@ -1,9 +1,11 @@
-# Project Name
+Base Mode Objective:
+    1. Create a details page using sagas/redux for each movie including the following:
+        -genres(all)
+        -title
+        -description
+        -image
 
-[Project Instructions](./INSTRUCTIONS.md), this line may be removed once you have updated the README.md
+    2. Details page must have a <button> that takes them back to the home page
 
-## Description
+    3. Utitlize a '/GET' request with a route.get(/id) for specific movies
 
-Your project description goes here. What problem did you solve? How did you solve it?
-
-Additional README details can be found [here](https://github.com/PrimeAcademy/readme-template/blob/master/README.md).

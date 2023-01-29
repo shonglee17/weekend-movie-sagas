@@ -11,27 +11,11 @@ import createSagaMiddleware from 'redux-saga';
 import { takeEvery, put } from 'redux-saga/effects';
 import axios from 'axios';
 
-// Create the rootSaga generator function
-function* rootSaga() {
-    yield takeEvery('FETCH_MOVIES', fetchAllMovies);
-}
-
-function* fetchAllMovies() {
-    // get all movies from the DB
-    try {
-        const movies = yield axios.get('/api/movie');
-        console.log('get all:', movies.data);
-        yield put({ type: 'SET_MOVIES', payload: movies.data });
-
-    } catch {
-        console.log('get all error');
-    }
-        
-}
 
 // Create sagaMiddleware
 const sagaMiddleware = createSagaMiddleware();
 
+//                                                       STORES BEGIN HERE
 // Used to store movies returned from the server
 const movies = (state = [], action) => {
     switch (action.type) {
@@ -52,15 +36,61 @@ const genres = (state = [], action) => {
     }
 }
 
+//Used to store the ID's when image is clicked
+const id = (state = [], action) => {
+    switch (action.type) {
+        case 'SAVE_ID':
+            return action.payload;
+
+        case 'RESET':
+            return state
+            
+        default:
+            return state;
+    }
+}
+//                                                     GENERATOR FUNCTIONS BEGIN HERE
+function* fetchAllMovies() {
+    // get all movies from the DB
+    try {
+        const movies = yield axios.get('/api/movie');
+        console.log('get all:', movies.data);
+        yield put({ type: 'SET_MOVIES', payload: movies.data });
+
+    } catch {
+        console.log('get all error');
+    }
+        
+}
+
+// function* id() {
+//     // get all movies from the DB
+//     try {
+//         const movies = yield axios.get('/api/movie');
+//         console.log('get all:', movies.data);
+//         yield put({ type: 'SET_MOVIES', payload: movies.data });
+
+//     } catch {
+//         console.log('get all error');
+//     }
+        
+// }
 // Create one store that all components can use
 const storeInstance = createStore(
     combineReducers({
         movies,
         genres,
+        id
     }),
     // Add sagaMiddleware to our store
     applyMiddleware(sagaMiddleware, logger),
 );
+
+// Create the rootSaga generator function
+function* rootSaga() {
+    yield takeEvery('FETCH_MOVIES', fetchAllMovies);
+    yield takeEvery('SAGA/SAVE_ID', id)
+}
 
 // Pass rootSaga into our sagaMiddleware
 sagaMiddleware.run(rootSaga);
